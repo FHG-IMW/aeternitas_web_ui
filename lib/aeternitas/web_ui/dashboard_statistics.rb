@@ -38,15 +38,15 @@ module Aeternitas
 
       def self.future_polls
         labels = []
-        datapoints = Hash.new do |k,v| k[v] = Array.new(0) end
+        datapoints = Hash.new { |k, v| k[v] = Array.new(7, 0) }
 
         (Date.today..6.days.from_now.to_date).each_with_index do |day, i|
           labels[i] = day.strftime("%b %d")
           Aeternitas::PollableMetaData
             .where(next_polling: (day.beginning_of_day..day.end_of_day))
-            .group(:pollable_type)
+            .group(:pollable_class)
             .count
-            .each_pair {|pollable, count| datapoints[pollable][i] = count }
+            .each_pair { |pollable, count| datapoints[pollable][i] = count }
         end
 
         colors = ColorGenerator.new(datapoints.count)
@@ -87,7 +87,7 @@ module Aeternitas
         end
 
         {
-          labels: range.to_a.map {|date| date.strftime("%B %d")},
+          labels: range.to_a.map { |date| date.strftime("%B %d") },
           datasets: datasets
         }
       end
