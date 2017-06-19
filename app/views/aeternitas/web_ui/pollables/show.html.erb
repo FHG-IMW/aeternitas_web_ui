@@ -89,7 +89,7 @@
   <div class="container grid-1280">
     <div class="columns">
       <div class="column col-5">
-        <h5>Execution Time</h5>
+        <h5>Execution Time <small>milliseconds</small></h5>
         <canvas id="execution_time"></canvas>
         <script>
             register_chart("execution_time", "<%= execution_time_pollable_path(id: @pollable.name) %>", {

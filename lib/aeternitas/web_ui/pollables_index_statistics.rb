@@ -11,7 +11,7 @@ module Aeternitas
             from: 24.hours.ago,
             to: Time.now,
             resolution: :hour
-        ).avg
+        ).avg.round(2)
       end
 
       def self.guard_locked_ratio(pollable)
@@ -20,7 +20,7 @@ module Aeternitas
             from: 24.hours.ago,
             to: Time.now,
             resolution: :hour
-        ).avg
+        ).avg.round(2)
       end
 
       def self.polls(pollable)

@@ -73,7 +73,7 @@ module Aeternitas
             datasets: [
                 {
                     label: 'Average',
-                    data: polling_time.map {|v| v[:avg]},
+                    data: polling_time.map {|v| (v[:avg] * 1000).to_i},
                     borderColor: "#96C0CE",
                     backgroundColor: "rgba(171,221,235,0.5)",
                     fill: false,
@@ -81,7 +81,7 @@ module Aeternitas
                 },
                 {
                     label: 'Minimum',
-                    data: polling_time.map {|v| v[:min]},
+                    data: polling_time.map {|v| (v[:min] * 1000).to_i},
                     borderColor: "#32b643",
                     backgroundColor: "rgba(50,182,67,0.5)",
                     fill: false,
@@ -89,9 +89,9 @@ module Aeternitas
                 },
                 {
                     label: 'Maximum',
-                    data: polling_time.map {|v| v[:max]},
-                    borderColor: "#C25B56",
-                    backgroundColor: "rgba(255,116,111,0.5)",
+                    data: polling_time.map {|v| (v[:max] * 1000).to_i},
+                    borderColor: "#ffd59c",
+                    backgroundColor: "rgba(255,213,156,0.5)",
                     fill: false,
                     type: 'line'
                 }
