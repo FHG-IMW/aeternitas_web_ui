@@ -44,7 +44,7 @@ module Aeternitas
                 },
                 {
                     label: '# Successfull Polls',
-                    data: polls.map {|v| v[:count]},
+                    data: success.map {|v| v[:count]},
                     borderColor: "#32b643",
                     backgroundColor: "rgba(50,182,67,0.5)",
                 },
