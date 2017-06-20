@@ -8,7 +8,7 @@ Aeternitas::WebUi::Engine.routes.draw do
   resources :pollables, only: [:index, :show] do
     get :timeline, on: :member
     get :execution_time, on: :member
-    get :pollable_growth, on: :member
+    get :data_growth, on: :member
   end
 
   root 'dashboard#index'
