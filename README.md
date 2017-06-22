@@ -3,6 +3,8 @@
 It allows you to keep track of polling activities and metrics like pollables and source growth, 
 error rates and execution times.
 
+![UI Screenshot](https://github.com/FHG-IMW/aeternitas_web_ui/blob/master/screenshot.png?raw=true)
+
 ## Installation
 Add this line to your application's Gemfile:
 
