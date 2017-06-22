@@ -4,4 +4,8 @@ class Website < ApplicationRecord
   polling_options do
     polling_frequency :daily
   end
+
+  def poll
+    raise "Test"
+  end
 end
