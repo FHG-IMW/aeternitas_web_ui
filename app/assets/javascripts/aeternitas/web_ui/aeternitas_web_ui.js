@@ -19,7 +19,7 @@
 
 window.charts = [];
 window.currentTimeRange = {
-    from: moment().subtract(30,"minutes"),
+    from: moment().subtract(1,"day"),
     to: moment()
 };
 

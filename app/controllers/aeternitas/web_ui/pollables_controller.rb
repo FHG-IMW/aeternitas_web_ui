@@ -26,9 +26,9 @@ module Aeternitas
         end
       end
 
-      def pollable_growth
+      def data_growth
         respond_to do |format|
-          format.json { render json: Aeternitas::WebUi::PollableStatistics.pollable_growth(@pollable, @from, @to)}
+          format.json { render json: Aeternitas::WebUi::PollableStatistics.data_growth(@pollable, @from, @to)}
         end
       end
 

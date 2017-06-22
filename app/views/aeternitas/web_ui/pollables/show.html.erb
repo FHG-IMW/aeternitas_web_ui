@@ -89,7 +89,7 @@
   <div class="container grid-1280">
     <div class="columns">
       <div class="column col-5">
-        <h5>Execution Time</h5>
+        <h5>Execution Time <small>milliseconds</small></h5>
         <canvas id="execution_time"></canvas>
         <script>
             register_chart("execution_time", "<%= execution_time_pollable_path(id: @pollable.name) %>", {
@@ -108,10 +108,10 @@
       <div class="column col-2"></div>
 
       <div class="column col-5">
-        <h5>Pollable Growth</h5>
+        <h5>Data Growth</h5>
         <canvas id="pollable_growth"></canvas>
         <script>
-            register_chart("pollable_growth", "<%= pollable_growth_pollable_path(id: @pollable.name) %>", {
+            register_chart("pollable_growth", "<%= data_growth_pollable_path(id: @pollable.name) %>", {
                 type: 'line',
                 options: {
                     responsive: true,

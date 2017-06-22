@@ -44,7 +44,7 @@ module Aeternitas
                 },
                 {
                     label: '# Successfull Polls',
-                    data: polls.map {|v| v[:count]},
+                    data: success.map {|v| v[:count]},
                     borderColor: "#32b643",
                     backgroundColor: "rgba(50,182,67,0.5)",
                 },
@@ -73,7 +73,7 @@ module Aeternitas
             datasets: [
                 {
                     label: 'Average',
-                    data: polling_time.map {|v| v[:avg]},
+                    data: polling_time.map {|v| (v[:avg] * 1000).to_i},
                     borderColor: "#96C0CE",
                     backgroundColor: "rgba(171,221,235,0.5)",
                     fill: false,
@@ -81,7 +81,7 @@ module Aeternitas
                 },
                 {
                     label: 'Minimum',
-                    data: polling_time.map {|v| v[:min]},
+                    data: polling_time.map {|v| (v[:min] * 1000).to_i},
                     borderColor: "#32b643",
                     backgroundColor: "rgba(50,182,67,0.5)",
                     fill: false,
@@ -89,9 +89,9 @@ module Aeternitas
                 },
                 {
                     label: 'Maximum',
-                    data: polling_time.map {|v| v[:max]},
-                    borderColor: "#C25B56",
-                    backgroundColor: "rgba(255,116,111,0.5)",
+                    data: polling_time.map {|v| (v[:max] * 1000).to_i},
+                    borderColor: "#ffd59c",
+                    backgroundColor: "rgba(255,213,156,0.5)",
                     fill: false,
                     type: 'line'
                 }
@@ -99,24 +99,31 @@ module Aeternitas
         }
       end
 
-      def self.pollable_growth(pollable, from, to)
-        data = Aeternitas::Metrics.pollables_created(
-            pollable,
-            from: from,
-            to: to,
-            resolution: get_resolution(from, to)
-        )
+      def self.data_growth(pollable, from, to)
+        resolution = get_resolution(from, to)
+        pollables_created = Aeternitas::Metrics.pollables_created(pollable, from: from, to: to, resolution: resolution)
+        sources_created = Aeternitas::Metrics.sources_created(pollable, from: from, to: to, resolution: resolution)
 
         {
-            labels: data.map  {|v| v[:timestamp].strftime('%B %d. %H:%M') },
-            datasets: [{
-                           label: "# of created #{pollable.name.pluralize}",
-                           data: data.map { |v| v[:count] },
-                           borderColor: '#96C0CE',
-                           backgroundColor: 'rgba(171,221,235,0.5)',
-                           fill: false,
-                           type: 'line'
-                       }]
+          labels: pollables_created.map  { |v| v[:timestamp].strftime('%B %d. %H:%M') },
+          datasets: [
+            {
+              label: "Created #{pollable.name.pluralize}",
+              data: pollables_created.map { |v| v[:count] },
+              borderColor: '#96C0CE',
+              backgroundColor: 'rgba(171,221,235,0.5)',
+              fill: false,
+              type: 'line'
+            },
+            {
+              label: "Created Sources",
+              data: sources_created.map { |v| v[:count] },
+              borderColor: "#32b643",
+              backgroundColor: "rgba(50,182,67,0.5)",
+              fill: false,
+              type: 'line'
+            }
+          ]
         }
       end
 
