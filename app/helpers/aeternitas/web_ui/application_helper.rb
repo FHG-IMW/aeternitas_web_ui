@@ -14,14 +14,20 @@ module Aeternitas
         content_tag :span, "#{ratio * 100}%", class: label_type
       end
 
-      def pretty_print_attributes(pollable)
-        content_tag(:ul, class: "attribute-list") do
-          pollable.attributes.map do |key, value|
-            content_tag(:li) do
-              (content_tag(:strong, "#{key}: ") + content_tag(:em, value)).html_safe
-            end
-          end.join("\n").html_safe
+      def get_identifier(pollable)
+        identifier = pollable.id.to_s
+        identifier +=
+          if pollable.respond_to?(:name)
+            ' - ' + pollable.name.to_s
+          elsif pollable.respond_to? :label
+            ' - ' + pollable.label.to_s
+          elsif pollable.respond_to? :identifier
+            ' - ' + pollable.identifier.to_s
+          elsif pollable.respond_to? :url
+            ' - ' + pollable.url.to_s
         end
+
+        identifier
       end
     end
   end

@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'aeternitas'
   s.add_dependency 'colorable'
   s.add_dependency 'sass-rails'
+  s.add_dependency 'jbuilder'
 
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'factory_girl_rails'

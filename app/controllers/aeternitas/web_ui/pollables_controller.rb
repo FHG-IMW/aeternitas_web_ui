@@ -1,8 +1,10 @@
 module Aeternitas
   module WebUi
     class PollablesController < Aeternitas::WebUi::ApplicationController
+      include ActionController::ImplicitRender
+
       before_action :set_pollable, except: [:index]
-      before_action :set_time_range, except: [:index, :show]
+      before_action :set_time_range, only: [:timeline, :execution_time, :data_growth]
 
 
       def index
@@ -30,6 +32,20 @@ module Aeternitas
         respond_to do |format|
           format.json { render json: Aeternitas::WebUi::PollableStatistics.data_growth(@pollable, @from, @to)}
         end
+      end
+
+      def deactivated_pollables
+        start = params.fetch(:start, 0)
+        limit = params.fetch(:length, 10)
+
+        @pollable_meta_data = Aeternitas::WebUi::PollableStatistics.deactivated_pollables(@pollable, start: start, limit: limit)
+      end
+
+      def all_pollables
+        start = params.fetch(:start, 0)
+        limit = params.fetch(:length, 10)
+
+        @pollable_meta_data = Aeternitas::WebUi::PollableStatistics.all_pollables(@pollable, start: start, limit: limit)
       end
 
       private

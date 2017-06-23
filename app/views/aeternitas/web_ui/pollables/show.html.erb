@@ -130,30 +130,71 @@
 <div class="section-white">
   <div class="container grid-1280">
     <h3> Deactivated Pollables </h3>
-    <table id="pollables-list" class="table">
+    <table id="deactivated-pollables" class="table">
       <thead>
       <tr>
-        <th> Data </th>
+        <th> Identifier </th>
         <th> Last Polling </th>
         <th> Deactivation Reason </th>
         <th> Deactivated At </th>
       </tr>
       </thead>
       <tbody>
-      <% Aeternitas::WebUi::PollableStatistics.deactivated_pollables(@pollable).each do |meta_data| %>
-          <tr>
-            <td> <%= pretty_print_attributes(meta_data.pollable) %> </td>
-            <td> <%= meta_data.last_polling %> </td>
-            <td> <%= meta_data.deactivation_reason %> </td>
-            <td> <%= l(meta_data.deactivated_at, format: :long) %> </td>
-          </tr>
-      <% end %>
       </tbody>
     </table>
     <script>
         $(document).ready(function() {
-            $('#pollables-list').DataTable();
+          $('#deactivated-pollables').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": "<%= deactivated_pollables_pollable_path(id: @pollable.name) %>",
+            "columns": [
+              {data: "identifier"},
+              {data: "last_polling"},
+              {data: "deactivation_reason"},
+              {data: "deactivated_at"}
+            ],
+            "ordering": false,
+            "searching": false
+          });
         } );
+    </script>
+  </div>
+</div>
+
+<div class="section-white">
+  <div class="container grid-1280">
+    <h3> Pollables </h3>
+    <table id="pollables-list" class="table">
+      <thead>
+      <tr>
+        <th> Identifier </th>
+        <th> Status </th>
+        <th> Last Polling </th>
+        <th> Next Polling </th>
+        <th> Sources </th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <script>
+      $(document).ready(function() {
+          $('#pollables-list').DataTable({
+              "processing": true,
+              "serverSide": true,
+              "ajax": "<%= all_pollables_pollable_path(id: @pollable.name) %>",
+              "columns": [
+                  {data: "identifier"},
+                  {data: "status"},
+                  {data: "last_polling"},
+                  {data: "next_polling"},
+                  {data: "sources"}
+              ],
+              "ordering": false,
+              "searching": false
+          });
+      } );
     </script>
   </div>
 </div>

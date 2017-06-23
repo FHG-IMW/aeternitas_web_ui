@@ -9,6 +9,8 @@ Aeternitas::WebUi::Engine.routes.draw do
     get :timeline, on: :member
     get :execution_time, on: :member
     get :data_growth, on: :member
+    get :all_pollables, on: :member
+    get :deactivated_pollables, on: :member
   end
 
   root 'dashboard#index'
