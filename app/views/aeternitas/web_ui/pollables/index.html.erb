@@ -11,19 +11,38 @@
       </tr>
     </thead>
     <tbody>
-      <% Aeternitas::WebUi::PollablesIndexStatistics.available_pollables.each do |pollable| %>
+      <% @pollable_classes.each do |pollable_class| %>
         <tr>
-          <td> <%= link_to pollable.name, pollable_path(id: pollable.name) %> </td>
-          <td> <%= pollable.count %> </td>
-          <td> <%= Aeternitas::WebUi::PollablesIndexStatistics.polls(pollable) %> </td>
+          <td> <%= link_to pollable_class.name, pollable_path(id: pollable_class.name) %> </td>
+          <td> <%= pollable_class.count %> </td>
+          <td>
+            <%=
+              Aeternitas::Metrics.polls(
+                pollable_class,
+                from: 24.hours.ago,
+                to: Time.now,
+                resolution: :hour
+                ).map { |v| v[:count] }.sum
+            %>
+          </td>
           <td>
             <div class="sparkline" style="max-width:250px; max-height:30px">
-              <%=  Aeternitas::WebUi::PollablesIndexStatistics.failures(pollable) %>
+              <%=
+                Aeternitas::Metrics
+                  .failure_ratio(pollable_class, from: 2.weeks.ago, to: Time.now, resolution: :day)
+                  .map {|v| v[:ratio]}
+                  .join(",")
+              %>
             </div>
           </td>
           <td>
             <div class="sparkline" style="max-width:250px; max-height:30px">
-              <%=  Aeternitas::WebUi::PollablesIndexStatistics.guard_locks(pollable) %>
+              <%=
+                Aeternitas::Metrics
+                  .guard_locked_ratio(pollable_class, from: 2.weeks.ago, to: Time.now, resolution: :day)
+                  .map {|v| v[:ratio]}
+                  .join(",")
+              %>
             </div>
           </td>
         </tr>

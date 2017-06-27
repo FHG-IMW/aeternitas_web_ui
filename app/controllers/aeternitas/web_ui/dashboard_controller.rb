@@ -47,11 +47,7 @@ module Aeternitas
 
       private
 
-      def set_timerange
-        @from = DateTime.parse(params.require(:from))
-        @to = DateTime.parse(params.require(:to))
-        @resolution = get_resolution(@from, @to)
-      end
+
     end
   end
 end

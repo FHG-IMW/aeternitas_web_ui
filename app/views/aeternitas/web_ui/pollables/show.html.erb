@@ -36,7 +36,14 @@
             </div>
           </div>
           <div class="info-box-body">
-            <strong> <%= Aeternitas::WebUi::PollableStatistics.enqueued(@pollable) %> </strong> Pollables
+            <strong>
+              <%=
+                Aeternitas::PollableMetaData
+                .where(pollable_class: @pollable.name)
+                .enqueued
+                .count
+              %>
+            </strong> Pollables
             <small>are currently enqueued</small>
           </div>
         </div>
@@ -49,7 +56,14 @@
             </div>
           </div>
           <div class="info-box-body">
-            <strong> <%= Aeternitas::WebUi::PollableStatistics.deactivated(@pollable) %> </strong> Pollables
+            <strong>
+              <%=
+                Aeternitas::PollableMetaData
+                .where(pollable_class: @pollable.name)
+                .deactivated
+                .count
+              %>
+            </strong> Pollables
             <small>are deactivated</small>
           </div>
         </div>
