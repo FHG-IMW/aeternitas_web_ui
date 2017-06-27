@@ -5,22 +5,18 @@ module Aeternitas
         Aeternitas::PollableMetaData.distinct(:pollable_class).pluck(:pollable_class).map(&:constantize)
       end
 
-      def self.failure_ratio(pollable)
-        Aeternitas::Metrics.failure_ratio(
-            pollable,
-            from: 24.hours.ago,
-            to: Time.now,
-            resolution: :hour
-        ).avg.round(2)
+      def self.failures(pollable)
+        Aeternitas::Metrics
+          .failed_polls(pollable, from: 2.weeks.ago, to: Time.now, resolution: :day)
+          .map {|v| v[:count]}
+          .join(",")
       end
 
-      def self.guard_locked_ratio(pollable)
-        Aeternitas::Metrics.guard_locked_ratio(
-            pollable,
-            from: 24.hours.ago,
-            to: Time.now,
-            resolution: :hour
-        ).avg.round(2)
+      def self.guard_locks(pollable)
+        Aeternitas::Metrics
+          .guard_locked(pollable, from: 2.weeks.ago, to: Time.now, resolution: :day)
+          .map {|v| v[:count]}
+          .join(",")
       end
 
       def self.polls(pollable)

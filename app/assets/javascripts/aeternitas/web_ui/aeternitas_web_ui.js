@@ -14,6 +14,7 @@
 //= require ./moment.min.js
 //= require ./Chart.min.js
 //= require ./datatables.min.js
+//= require ./sparkline
 //= require_self
 //
 
