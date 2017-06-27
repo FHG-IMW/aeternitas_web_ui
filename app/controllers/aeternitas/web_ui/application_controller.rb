@@ -8,6 +8,19 @@ module Aeternitas
         @message = message
         render template: 'aeternitas/web_ui/dashboard/error', status: status
       end
+
+      def get_resolution(from, to)
+        case (to.to_time - from.to_time)
+          when 0.hours..2.hours
+            :minute
+          when 2.hours..12.hours
+            :ten_minutes
+          when 12.hours..3.days
+            :hour
+          else
+            :day
+        end
+      end
     end
   end
 end
