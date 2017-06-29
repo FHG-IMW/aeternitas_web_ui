@@ -1,4 +1,7 @@
 # Aeternitas WebUi
+
+[![Build Status](https://travis-ci.org/FHG-IMW/aeternitas_web_ui.svg?branch=master)](https://travis-ci.org/FHG-IMW/aeternitas_web_ui)
+
 Æternitas WebUi is a monitoring tool for [Æternitas](https://github.com/FHG-IMW/aeternitas).
 It allows you to keep track of polling activities and metrics like pollables and source growth, 
 error rates and execution times.
