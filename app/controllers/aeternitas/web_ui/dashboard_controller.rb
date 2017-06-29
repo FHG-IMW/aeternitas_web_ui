@@ -44,10 +44,6 @@ module Aeternitas
       end
 
       def error ; end
-
-      private
-
-
     end
   end
 end

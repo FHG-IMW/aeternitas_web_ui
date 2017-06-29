@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615150918) do
+ActiveRecord::Schema.define(version: 20170629115814) do
 
   create_table "aeternitas_pollable_meta_data", force: :cascade do |t|
     t.string "pollable_type", null: false
@@ -30,8 +30,11 @@ ActiveRecord::Schema.define(version: 20170615150918) do
     t.string "pollable_type", null: false
     t.integer "pollable_id", null: false
     t.datetime "created_at"
-    t.index ["fingerprint"], name: "sqlite_autoindex_aeternitas_sources_1", unique: true
     t.index ["pollable_id", "pollable_type"], name: "aeternitas_pollable_source"
+  end
+
+  create_table "patents", force: :cascade do |t|
+    t.string "patent_id"
   end
 
   create_table "websites", force: :cascade do |t|
