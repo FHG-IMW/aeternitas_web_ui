@@ -1,35 +1,49 @@
 module Aeternitas
   module WebUi
     class DashboardController < Aeternitas::WebUi::ApplicationController
-      def index
+      before_action :set_timerange, only: [:polls_timeline, :pollable_growth]
 
-      end
+      def index ; end
 
-      def polls_24h
-        @polls = Aeternitas::WebUi::DashboardStatistics.polls_24h
+      def polls_timeline
+        @polls = Aeternitas::Metrics.polls(Pollable, from: @from, to: @to, resolution: @resolution)
+        @failures = Aeternitas::Metrics.failed_polls(Pollable, from: @from, to: @to, resolution: @resolution)
+
         respond_to do |format|
-          format.json { render json: @polls }
+          format.json {}
         end
       end
 
       def future_polls
-        @polls = Aeternitas::WebUi::DashboardStatistics.future_polls
+        @labels = []
+        @datasets = Hash.new { |k, v| k[v] = Array.new(7, 0) }
+
+        (Date.today..6.days.from_now.to_date).each_with_index do |day, i|
+          @labels[i] = day.strftime("%b %d")
+          Aeternitas::PollableMetaData
+            .where(next_polling: (day.beginning_of_day..day.end_of_day))
+            .group(:pollable_class)
+            .count
+            .each_pair { |pollable, count| @datasets[pollable][i] = count }
+        end
 
         respond_to do |format|
-          format.json { render json: @polls }
+          format.json { }
         end
       end
 
       def pollable_growth
-        @polls = Aeternitas::WebUi::DashboardStatistics.pollable_growth
+        @pollable_classes = Aeternitas::PollableMetaData
+          .distinct(:pollable_class)
+          .pluck(:pollable_class)
+          .map(&:constantize)
+
         respond_to do |format|
-          format.json { render json: @polls }
+          format.json {}
         end
       end
 
-      def error
-
-      end
+      def error ; end
     end
   end
 end

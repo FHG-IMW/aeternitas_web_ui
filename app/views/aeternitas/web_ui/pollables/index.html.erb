@@ -6,26 +6,61 @@
         <th> Pollable </th>
         <th> Count </th>
         <th> Polls* </th>
-        <th> Error Rate* </th>
-        <th> Lock Rate* </th>
+        <th> Error Rate** </th>
+        <th> Lock Rate** </th>
       </tr>
     </thead>
     <tbody>
-      <% Aeternitas::WebUi::PollablesIndexStatistics.available_pollables.each do |pollable| %>
+      <% @pollable_classes.each do |pollable_class| %>
         <tr>
-          <td> <%= link_to pollable.name, pollable_path(id: pollable.name) %> </td>
-          <td> <%= pollable.count %> </td>
-          <td> <%= Aeternitas::WebUi::PollablesIndexStatistics.polls(pollable) %> </td>
-          <td> <%= rate_ratio Aeternitas::WebUi::PollablesIndexStatistics.failure_ratio(pollable) %> </td>
-          <td> <%= rate_ratio Aeternitas::WebUi::PollablesIndexStatistics.guard_locked_ratio(pollable) %> </td>
+          <td> <%= link_to pollable_class.name, pollable_path(id: pollable_class.name) %> </td>
+          <td> <%= pollable_class.count %> </td>
+          <td>
+            <%=
+              Aeternitas::Metrics.polls(
+                pollable_class,
+                from: 24.hours.ago,
+                to: Time.now,
+                resolution: :hour
+                ).map { |v| v[:count] }.sum
+            %>
+          </td>
+          <td>
+            <div class="sparkline" style="max-width:250px; max-height:30px">
+              <%=
+                Aeternitas::Metrics
+                  .failure_ratio(pollable_class, from: 2.weeks.ago, to: Time.now, resolution: :day)
+                  .map {|v| v[:ratio]}
+                  .join(",")
+              %>
+            </div>
+          </td>
+          <td>
+            <div class="sparkline" style="max-width:250px; max-height:30px">
+              <%=
+                Aeternitas::Metrics
+                  .guard_locked_ratio(pollable_class, from: 2.weeks.ago, to: Time.now, resolution: :day)
+                  .map {|v| v[:ratio]}
+                  .join(",")
+              %>
+            </div>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
   <script>
     $(document).ready(function() {
-      $('#pollables-list').DataTable();
+      $('#pollables-list').DataTable({
+          columns: [
+              null,
+              null,
+              null,
+              {orderable: false},
+              {orderable: false},
+          ]
+      });
     } );
   </script>
-  <small>* within the last 24h</small>
+  <small>* within the last 24h | ** within the last 2 weeks</small>
 </div>

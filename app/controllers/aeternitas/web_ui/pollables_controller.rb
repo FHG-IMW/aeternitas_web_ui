@@ -1,35 +1,54 @@
 module Aeternitas
   module WebUi
     class PollablesController < Aeternitas::WebUi::ApplicationController
-      before_action :set_pollable, except: [:index]
-      before_action :set_time_range, except: [:index, :show]
+      include ActionController::ImplicitRender
 
+      before_action :set_pollable, except: [:index]
+      before_action :set_timerange, only: [:timeline, :execution_time, :data_growth]
 
       def index
-        respond_to do |format|
-          format.html { }
-          format.json { }
-        end
+        @pollable_classes = Aeternitas::PollableMetaData
+          .distinct(:pollable_class)
+          .pluck(:pollable_class)
+          .map(&:constantize)
       end
 
       def show ; end
 
-      def timeline
-        respond_to do |format|
-          format.json { render json: Aeternitas::WebUi::PollableStatistics.timeline(@pollable, @from, @to)}
-        end
-      end
+      def timeline ; end
 
       def execution_time
-        respond_to do |format|
-          format.json { render json: Aeternitas::WebUi::PollableStatistics.execution_time(@pollable, @from, @to)}
-        end
+        @polling_time = Aeternitas::Metrics.execution_time(@pollable, from: @from, to: @to, resolution: @resolution)
       end
 
       def data_growth
-        respond_to do |format|
-          format.json { render json: Aeternitas::WebUi::PollableStatistics.data_growth(@pollable, @from, @to)}
-        end
+        @pollables_created = Aeternitas::Metrics.pollables_created(@pollable, from: @from, to: @to, resolution: @resolution)
+        @sources_created = Aeternitas::Metrics.sources_created(@pollable, from: @from, to: @to, resolution: @resolution)
+      end
+
+      def deactivated_pollables
+        start = params.fetch(:start, 0)
+        limit = params.fetch(:length, 10)
+
+        @pollable_meta_data = Aeternitas::PollableMetaData
+          .deactivated
+          .includes(:pollable)
+          .where(pollable_class: @pollable.name)
+          .limit(limit)
+          .offset(start)
+          .order(deactivated_at: :desc)
+      end
+
+      def all_pollables
+        start = params.fetch(:start, 0)
+        limit = params.fetch(:length, 10)
+
+        @pollable_meta_data = Aeternitas::PollableMetaData
+          .where(pollable_class: @pollable.name)
+          .includes(pollable: :sources)
+          .limit(limit)
+          .offset(start)
+          .order(last_polling: :desc)
       end
 
       private
@@ -43,11 +62,6 @@ module Aeternitas
           render_error(404, "Pollable of type #{pollable_name} not found")
           false
         end
-      end
-
-      def set_time_range
-        @from = DateTime.parse(params.require(:from))
-        @to = DateTime.parse(params.require(:to))
       end
     end
   end

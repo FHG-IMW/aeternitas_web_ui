@@ -4,6 +4,7 @@ PATH
     aeternitas_web_ui (0.1.0)
       aeternitas
       colorable
+      jbuilder
       rails (>= 5.0.0)
       sass-rails
 
@@ -62,6 +63,7 @@ GEM
     colorable (0.2.0)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
+    database_cleaner (1.6.1)
     diff-lcs (1.3)
     erubi (1.6.0)
     factory_girl (4.8.0)
@@ -72,6 +74,9 @@ GEM
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     i18n (0.8.4)
+    jbuilder (2.6.4)
+      activesupport (>= 3.0.0)
+      multi_json (>= 1.2)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.6)
@@ -82,6 +87,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.2.0)
     minitest (5.10.2)
+    multi_json (1.12.1)
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
@@ -102,6 +108,10 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 5.1.1)
       sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.2)
+      actionpack (~> 5.x, >= 5.0.1)
+      actionview (~> 5.x, >= 5.0.1)
+      activesupport (~> 5.x)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -161,6 +171,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.7)
+    timecop (0.8.1)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     websocket-driver (0.6.5)
@@ -172,9 +183,12 @@ PLATFORMS
 
 DEPENDENCIES
   aeternitas_web_ui!
+  database_cleaner
   factory_girl_rails
+  rails-controller-testing
   rspec-rails
   sqlite3
+  timecop
 
 BUNDLED WITH
    1.15.1

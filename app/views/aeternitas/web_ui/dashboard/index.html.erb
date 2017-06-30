@@ -1,5 +1,14 @@
 <div class="container grid-1280">
-  <h2>Dashboard</h2>
+  <div class="columns">
+    <div class="column col-4">
+      <h2>Dashboard</h2>
+    </div>
+    <div class="col-8">
+      <div class="float-right" style="display: inline-block;">
+        <%= render partial: 'partials/timepicker' %>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="section-blue">
@@ -14,7 +23,7 @@
             </div>
           </div>
           <div class="info-box-body">
-            <strong> <%= Aeternitas::WebUi::DashboardStatistics.enqueued %> </strong> Pollables
+            <strong> <%= Aeternitas::PollableMetaData.enqueued.count %> </strong> Pollables
             <small>are currently enqueued</small>
           </div>
         </div>
@@ -27,7 +36,16 @@
             </div>
           </div>
           <div class="info-box-body">
-            <strong> <%= Aeternitas::WebUi::DashboardStatistics.count_polls_24h %> </strong> Polls
+            <strong>
+              <%=
+                Aeternitas::Metrics.polls(
+                  Aeternitas::Pollable,
+                  from: 24.hours.ago,
+                  to: Time.now,
+                  resolution: :day
+                ).map {|v| v[:count]}.sum
+              %>
+            </strong> Polls
             <small>within the last 24h</small>
           </div>
         </div>
@@ -40,7 +58,16 @@
             </div>
           </div>
           <div class="info-box-body">
-            <strong> <%= Aeternitas::WebUi::DashboardStatistics.count_failed_polls_24h %> </strong> Failures
+            <strong>
+              <%=
+                Aeternitas::Metrics.failed_polls(
+                  Aeternitas::Pollable,
+                  from: 24.hours.ago,
+                  to: Time.now,
+                  resolution: :day
+                ).map {|v| v[:count]}.sum
+              %>
+            </strong> Failures
             <small>within the last 24h</small>
           </div>
         </div>
@@ -53,13 +80,12 @@
   <div class="container grid-1280">
     <h4>
       Polls
-      <small>Last 24h</small>
     </h4>
   </div>
   <div class="large-canvas">
-    <canvas id="polls_24h"></canvas>
+    <canvas id="polls-timeline"></canvas>
     <script>
-        register_chart("polls_24h", "<%= polls_24h_dashboard_path %>", {
+        register_chart("polls-timeline", "<%= polls_timeline_dashboard_path %>", {
             type: 'line',
             options: {
                 responsive: true,
