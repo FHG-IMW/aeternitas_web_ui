@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    aeternitas_web_ui (0.2.0)
+    aeternitas_web_ui (0.2.1)
       aeternitas
       colorable
       jbuilder
