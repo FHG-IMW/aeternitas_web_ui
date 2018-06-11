@@ -60,7 +60,7 @@ GEM
       tabstabs
     arel (8.0.0)
     builder (3.2.3)
-    colorable (0.2.0)
+    colorable (0.2.1)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crass (1.0.4)
